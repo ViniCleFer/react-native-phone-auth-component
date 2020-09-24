@@ -25,7 +25,7 @@
   },
   "dependencies": {
     "prop-types": "^15.6.0",
-    "react-native-country-picker-modal": "^0.5.1"
+    "react-native-country-picker-modal": "^2.0.0"
   },
   "scripts": {
     "test": "jest",
