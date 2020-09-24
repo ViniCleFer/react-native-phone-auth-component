@@ -1,6 +1,6 @@
 {
   "name": "react-native-phone-auth-component-vcf",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "keywords": [
     "react",
     "react native",
@@ -25,7 +25,8 @@
   },
   "dependencies": {
     "prop-types": "^15.6.0",
-    "react-native-country-picker-modal": "^2.0.0"
+    "react-native-country-picker-modal": "^0.5.1",
+    "deprecated-react-native-listview": "^0.0.6"
   },
   "scripts": {
     "test": "jest",
