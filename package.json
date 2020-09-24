@@ -11,12 +11,12 @@
   "description": "A simple, elegant component that seamlessly integrates with a phone authentication setup, styling and transitions included",
   "main": "src/index.js",
   "author": {
-    "name": "Tyler Stanish",
-    "email": "tystanish@gmail.com"
+    "name": "Vinicius Fernandes",
+    "email": "viniclefer@gmail.com"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/TylerStanish/react-native-phone-auth-component"
+    "url": "https://github.com/ViniCleFer/react-native-phone-auth-component"
   },
   "license": "MIT",
   "peerDependencies": {
