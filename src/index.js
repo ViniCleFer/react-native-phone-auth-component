@@ -37,6 +37,18 @@ class PhoneVerifyScreen extends React.Component {
       loadingRedeem: false
     };
     this.styles = {
+      title: {
+        fontStyle: "normal",
+        color: "#625C70",
+        fontWeight: "bold",
+        fontSize: 22,
+        paddingLeft: 30,
+        paddingRight: 30,
+        marginTop: 30,
+        marginBottom: 100,
+        width: width,
+        zIndex: 999
+      },
       phoneAuthText: {
         fontSize: 20,
         alignItems: "center",
@@ -180,10 +192,7 @@ class PhoneVerifyScreen extends React.Component {
           Text,
           {
             key: index,
-            style: [
-              this.styles.phoneAuthText,
-              { color, fontSize: width / this.props.codeLength }
-            ]
+            style: [this.styles.phoneAuthText, { color }]
           },
           num
         )
@@ -220,66 +229,96 @@ class PhoneVerifyScreen extends React.Component {
     let verifying = (
       <Animated.View
         style={{
-          marginTop: 100,
+          // marginTop: 100,
           flex: 1,
-          marginBottom: this.state.keyboardHeight + 20,
+          marginBottom: this.state.keyboardHeight,
           flexDirection: "column",
           justifyContent: "space-between",
           alignItems: "center",
           opacity: this.state.verifyOpacity,
-          width: "100%"
+          width: "100%",
+          backgroundColor: "red"
         }}
       >
-        <View style={{ alignItems: "center", flexDirection: "row" }}>
-          <View style={{ flexDirection: "row", alignItems: "flex-start" }}>
-            <CountryPicker
-              onPress={() => {}}
-              cca2={this.state.countryInfo.cca2}
-              onChange={e => {
-                this._ref.focus();
-                this.setState({ countryInfo: e });
-              }}
-              onClose={() => this._ref.focus()}
-              filterable
-              closeable
-              showCallingCode
-            />
-            <Text style={[this.styles.phoneAuthText, { marginLeft: 10 }]}>
-              +{this.state.countryInfo.callingCode}
-            </Text>
-            {this.renderAreaCode()}
-          </View>
+        <>
+          <Text style={this.styles.title}>
+            Digite o número do celular para receber o seu código
+          </Text>
           <View
-            style={{ fontWeight: "normal", fontSize: 5, flexDirection: "row" }}
+            style={{
+              alignItems: "center",
+              flexDirection: "row",
+              marginLeft: -20,
+              height: Platform.OS === "ios" ? 200 : 120
+            }}
           >
-            {this.renderNumber()}
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "flex-start",
+                marginBottom: 15
+              }}
+            >
+              <CountryPicker
+                onPress={() => {}}
+                cca2={this.state.countryInfo.cca2}
+                onChange={e => {
+                  this._ref.focus();
+                  this.setState({ countryInfo: e });
+                }}
+                onClose={() => this._ref.focus()}
+                filterable
+                closeable
+                showCallingCode
+              />
+              <Text style={[this.styles.phoneAuthText, { marginLeft: 10 }]}>
+                +{this.state.countryInfo.callingCode}
+              </Text>
+              {this.renderAreaCode()}
+            </View>
+            <View
+              style={{
+                fontWeight: "normal",
+                fontSize: 5,
+                flexDirection: "row",
+                marginBottom: 15
+              }}
+            >
+              {this.renderNumber()}
+            </View>
           </View>
-        </View>
-        <TextInput
-          testID="phoneInput"
-          ref={ref => (this._ref = ref)}
-          keyboardType={"phone-pad"}
-          style={{ position: "absolute", top: -100, left: -100 }}
-          value={this.state.number}
-          onChangeText={num => {
-            if (num.length < 12) {
-              this.setState({ number: num });
-            }
-          }}
-        />
-        <View style={{ alignItems: "center" }}>
-          <Button
-            title={this.props.verifyButtonMessage}
-            backgroundColor={this.props.color}
-            onPress={() => this.verify()}
-            loading={this.state.loading}
-            spinnerColor={this.props.spinnerColor}
-            textColor={this.props.buttonTextColor}
+          <TextInput
+            testID="phoneInput"
+            ref={ref => (this._ref = ref)}
+            keyboardType={"phone-pad"}
+            style={{
+              position: "absolute",
+              top: -1000,
+              left: -1000,
+              backgroundColor: "tranparent",
+              color: "transparent"
+            }}
+            value={this.state.number}
+            onChangeText={num => {
+              if (num.length < 12) {
+                this.setState({ number: num });
+              }
+            }}
           />
-          {/* <Text style={this.styles.finePrint}>
+          <View style={{ alignItems: "center", backgroundColor: "yellow" }}>
+            <Button
+              title={this.props.verifyButtonMessage}
+              backgroundColor={this.props.color}
+              onPress={() => this.verify()}
+              loading={this.state.loading}
+              spinnerColor={this.props.spinnerColor}
+              textColor={this.props.buttonTextColor}
+            />
+            {/* <Text style={this.styles.finePrint}>
             {this.props.disclaimerMessage}
           </Text> */}
-        </View>
+          </View>
+        </>
       </Animated.View>
     );
 
@@ -287,17 +326,29 @@ class PhoneVerifyScreen extends React.Component {
       <Animated.View
         style={{
           opacity: this.state.redeemOpacity,
-          marginBottom: this.state.keyboardHeight + 20,
+          marginBottom: this.state.keyboardHeight,
           justifyContent: "space-between",
           alignItems: "center",
           flex: 1
         }}
       >
+        <Text
+          style={[this.styles.title, { height: 100, backgroundColor: "blue" }]}
+        >
+          Digite o código de validação que você irá receber por sms em seu
+          telefone
+        </Text>
+        {/* <View style={{ alignItems: "center" , flexDirection: 'row', marginLeft: -20, height: Platform.OS === 'ios' ? 200 :0}}> */}
+
+        <View style={{ flexDirection: "row", fontSize: 5, marginBottom: 15 }}>
+          {this.renderCode()}
+        </View>
+        {/* </View> */}
         <TextInput
           testID="codeInput"
           autoFocus
           keyboardType={"phone-pad"}
-          style={{ position: "absolute", top: -100, left: -100 }}
+          style={{ position: "absolute", top: -200, left: -200 }}
           value={this.state.code}
           onChangeText={num => {
             if (num.length < this.props.codeLength + 1) {
@@ -306,8 +357,6 @@ class PhoneVerifyScreen extends React.Component {
           }}
           ref={ref => (this._ref2 = ref)}
         />
-        <View />
-        <View style={{ flexDirection: "row" }}>{this.renderCode()}</View>
         <Button
           testID="codeButton"
           title={this.props.enterCodeMessage}
@@ -361,6 +410,7 @@ PhoneVerifyScreen.defaultProps = {
   enterCodeMessage: "Enter code",
   disclaimerMessage: "*Message & data rates may apply.",
   codeLength: 6,
+
   cca2: "BR",
   callingCode: "55"
 };
