@@ -3,7 +3,9 @@ import {
   View,
   Dimensions,
   Text,
+  Keyboard,
   Animated,
+  AppState,
   TextInput,
   Platform,
   TouchableOpacity
@@ -51,6 +53,9 @@ class PhoneVerifyScreen extends React.Component {
       phoneAuthText: {
         fontSize: 20,
         alignItems: "center",
+        // borderBottomWidth: 1,
+        // borderBottomColor: this.props.color,
+        // textDecorationLine: 'underline',
         margin: 1.5,
         fontFamily:
           Platform.OS === "android"
@@ -64,6 +69,13 @@ class PhoneVerifyScreen extends React.Component {
         marginTop: 10
       }
     };
+  }
+
+  componentWillUnmount() {
+    // AppState.removeEventListener(
+    //   "change",
+    //   this._handleAppStateChange.bind(this)
+    // );
   }
 
   _handleAppStateChange(nextAppState) {
@@ -82,9 +94,11 @@ class PhoneVerifyScreen extends React.Component {
   }
 
   componentDidMount() {
-    setTimeout(() => {
-      this._ref.focus();
-    }, 1200);
+    // AppState.addEventListener("change", this._handleAppStateChange.bind(this));
+    // let bla = Keyboard.addListener("keyboardDidShow", e => {
+    //   this.setState({ keyboardHeight: e.endCoordinates.height });
+    // });
+    this._ref.focus();
     Animated.timing(this.state.verifyOpacity, { toValue: 1 }).start();
   }
 
@@ -216,7 +230,9 @@ class PhoneVerifyScreen extends React.Component {
     let verifying = (
       <Animated.View
         style={{
+          // marginTop: 100,
           flex: 1,
+          // marginBottom: this.state.keyboardHeight,
           flexDirection: "column",
           justifyContent: "space-between",
           alignItems: "center",
@@ -234,6 +250,7 @@ class PhoneVerifyScreen extends React.Component {
                 alignItems: "center",
                 flexDirection: "row",
                 marginLeft: -20,
+                // backgroundColor: '#ff0',
                 height: Platform.OS === "ios" ? 200 : 120
               }}
             >
@@ -300,8 +317,12 @@ class PhoneVerifyScreen extends React.Component {
               spinnerColor={this.props.spinnerColor}
               textColor={this.props.buttonTextColor}
             />
+            {/* <Text style={this.styles.finePrint}>
+            {this.props.disclaimerMessage}
+          </Text> */}
           </View>
         </>
+        {/* </TouchableOpacity> */}
       </Animated.View>
     );
 
@@ -319,13 +340,12 @@ class PhoneVerifyScreen extends React.Component {
           Digite o código de validação que você irá receber por sms em seu
           telefone
         </Text>
+        {/* <View style={{ alignItems: "center" , flexDirection: 'row', marginLeft: -20, height: Platform.OS === 'ios' ? 200 :0}}> */}
 
-        <TouchableOpacity onPress={() => this._ref2.focus()}>
-          <View style={{ flexDirection: "row", fontSize: 5, marginBottom: 15 }}>
-            {this.renderCode()}
-          </View>
-        </TouchableOpacity>
-
+        <View style={{ flexDirection: "row", fontSize: 5, marginBottom: 15 }}>
+          {this.renderCode()}
+        </View>
+        {/* </View> */}
         <TextInput
           testID="codeInput"
           autoFocus
@@ -379,7 +399,7 @@ PhoneVerifyScreen.propTypes = {
 };
 
 PhoneVerifyScreen.defaultProps = {
-  color: "#6E8BC6",
+  color: "#ff8203",
   buttonTextColor: "white",
   spinnerColor: "white",
   redeemCode: () => console.log("Please attach method to redeemCode prop"),
