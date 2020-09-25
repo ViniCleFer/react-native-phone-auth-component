@@ -10,7 +10,7 @@ import {
   Platform
 } from "react-native";
 import Button from "./Button";
-import CountryPicker from "react-native-country-picker-modal";
+import CountryPicker from "react-native-country-picker-modal-vcf";
 import PropTypes from "prop-types";
 
 const { width } = Dimensions.get("window");
@@ -38,19 +38,19 @@ class PhoneVerifyScreen extends React.Component {
     };
     this.styles = {
       phoneAuthText: {
-        fontSize: width / 10,
+        fontSize: 20,
         alignItems: "center",
         // borderBottomWidth: 1,
         // borderBottomColor: this.props.color,
         // textDecorationLine: 'underline',
-        margin: 10,
+        margin: 1.5,
         fontFamily:
           Platform.OS === "android"
             ? this.props.androidFont
             : this.props.iOSFont
       },
       finePrint: {
-        fontSize: 12,
+        fontSize: 16,
         color: "gray",
         marginHorizontal: 15,
         marginTop: 10
@@ -91,8 +91,8 @@ class PhoneVerifyScreen extends React.Component {
 
   renderAreaCode() {
     let arr = [];
-    let numbers = this.state.number.split("").slice(0, 3);
-    for (let i = 0; i < 3; i++) {
+    let numbers = this.state.number.split("").slice(0, 2);
+    for (let i = 0; i < 2; i++) {
       if (isNaN(numbers[i])) numbers[i] = "_";
     }
     // we can use indexOf here because it returns the first index that it encounters '_'
@@ -128,14 +128,14 @@ class PhoneVerifyScreen extends React.Component {
 
   renderNumber() {
     let arr = [];
-    let numbers = this.state.number.split("").slice(0, 10);
-    for (let i = 0; i < 10; i++) {
+    let numbers = this.state.number.split("").slice(0, 11);
+    for (let i = 0; i < 11; i++) {
       if (isNaN(numbers[i])) numbers[i] = "_";
     }
     let next = numbers.indexOf("_");
-    numbers.slice(3, 6).map((num, index) => {
+    numbers.slice(2, 7).map((num, index) => {
       let color = "black";
-      if (index + 3 === next) color = this.props.color;
+      if (index + 2 === next) color = this.props.color;
       arr.push(
         React.createElement(
           Text,
@@ -151,9 +151,9 @@ class PhoneVerifyScreen extends React.Component {
         "-"
       )
     );
-    numbers.slice(6, 10).map((num, index) => {
+    numbers.slice(7, 12).map((num, index) => {
       let color = "black";
-      if (index + 6 === next) color = this.props.color;
+      if (index + 7 === next) color = this.props.color;
       arr.push(
         React.createElement(
           Text,
@@ -226,12 +226,14 @@ class PhoneVerifyScreen extends React.Component {
           flexDirection: "column",
           justifyContent: "space-between",
           alignItems: "center",
-          opacity: this.state.verifyOpacity
+          opacity: this.state.verifyOpacity,
+          width: "100%"
         }}
       >
-        <View style={{ alignItems: "center" }}>
-          <View style={{ flexDirection: "row", alignItems: "center" }}>
+        <View style={{ alignItems: "center", flexDirection: "row" }}>
+          <View style={{ flexDirection: "row", alignItems: "flex-start" }}>
             <CountryPicker
+              onPress={() => {}}
               cca2={this.state.countryInfo.cca2}
               onChange={e => {
                 this._ref.focus();
@@ -242,12 +244,16 @@ class PhoneVerifyScreen extends React.Component {
               closeable
               showCallingCode
             />
-            <Text style={this.styles.phoneAuthText}>
+            <Text style={[this.styles.phoneAuthText, { marginLeft: 10 }]}>
               +{this.state.countryInfo.callingCode}
             </Text>
             {this.renderAreaCode()}
           </View>
-          <View style={{ flexDirection: "row" }}>{this.renderNumber()}</View>
+          <View
+            style={{ fontWeight: "normal", fontSize: 5, flexDirection: "row" }}
+          >
+            {this.renderNumber()}
+          </View>
         </View>
         <TextInput
           testID="phoneInput"
@@ -256,12 +262,12 @@ class PhoneVerifyScreen extends React.Component {
           style={{ position: "absolute", top: -100, left: -100 }}
           value={this.state.number}
           onChangeText={num => {
-            if (num.length < 11) {
+            if (num.length < 12) {
               this.setState({ number: num });
             }
           }}
         />
-        <View style={{ alignItems: "center", width: "100%" }}>
+        <View style={{ alignItems: "center" }}>
           <Button
             title={this.props.verifyButtonMessage}
             backgroundColor={this.props.color}
@@ -270,9 +276,9 @@ class PhoneVerifyScreen extends React.Component {
             spinnerColor={this.props.spinnerColor}
             textColor={this.props.buttonTextColor}
           />
-          <Text style={this.styles.finePrint}>
+          {/* <Text style={this.styles.finePrint}>
             {this.props.disclaimerMessage}
-          </Text>
+          </Text> */}
         </View>
       </Animated.View>
     );
@@ -355,9 +361,8 @@ PhoneVerifyScreen.defaultProps = {
   enterCodeMessage: "Enter code",
   disclaimerMessage: "*Message & data rates may apply.",
   codeLength: 6,
-
   cca2: "BR",
-  callingCode: "1"
+  callingCode: "55"
 };
 
 export default PhoneVerifyScreen;
