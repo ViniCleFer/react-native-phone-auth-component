@@ -6,7 +6,7 @@ import {
   Animated,
   TextInput,
   Platform,
-  TouchableOpacity
+  TouchableOpacity,
 } from "react-native";
 import Button from "./Button";
 import CountryPicker from "react-native-country-picker-modal-vcf";
@@ -23,7 +23,7 @@ class PhoneVerifyScreen extends React.Component {
       keyboardHeight: 0,
       countryInfo: {
         cca2: p.cca2,
-        callingCode: p.callingCode
+        callingCode: p.callingCode,
       },
 
       verifying: true,
@@ -33,7 +33,7 @@ class PhoneVerifyScreen extends React.Component {
       appState: "",
 
       loading: false,
-      loadingRedeem: false
+      loadingRedeem: false,
     };
     this.styles = {
       title: {
@@ -46,7 +46,7 @@ class PhoneVerifyScreen extends React.Component {
         marginTop: -180,
         // marginBottom: -50,
         width: width,
-        zIndex: 999
+        zIndex: 999,
       },
       phoneAuthText: {
         fontSize: 20,
@@ -55,14 +55,14 @@ class PhoneVerifyScreen extends React.Component {
         fontFamily:
           Platform.OS === "android"
             ? this.props.androidFont
-            : this.props.iOSFont
+            : this.props.iOSFont,
       },
       finePrint: {
         fontSize: 16,
         color: "gray",
         marginHorizontal: 15,
-        marginTop: 10
-      }
+        marginTop: 10,
+      },
     };
   }
 
@@ -179,7 +179,7 @@ class PhoneVerifyScreen extends React.Component {
           Text,
           {
             key: index,
-            style: [this.styles.phoneAuthText, { color }]
+            style: [this.styles.phoneAuthText, { color }],
           },
           num
         )
@@ -191,6 +191,18 @@ class PhoneVerifyScreen extends React.Component {
   verify() {
     this.setState({ loading: true });
     let string = `+${this.state.countryInfo.callingCode}${this.state.number}`;
+
+    console.log(string.length, "string");
+
+    if (string.length < 14) {
+      alert(
+        'Número Inválido", O número de telefone está incompleto, preencha todos os campos solicitados.'
+      );
+      this.setState({ loading: false });
+
+      return;
+    }
+
     this.props
       .signInWithPhone(string)
       .then(() => {
@@ -207,8 +219,19 @@ class PhoneVerifyScreen extends React.Component {
 
   redeemCode() {
     this.setState({ loadingRedeem: true });
-    this.props.redeemCode(String(this.state.code)).catch(() => {
+
+    if (String(this.state.code).length < 6) {
+      alert(
+        'Código Inválido", O código está incompleto, preencha todos os campos solicitados.'
+      );
       this.setState({ loadingRedeem: false });
+      return;
+    }
+
+    this.props.redeemCode(String(this.state.code)).catch(() => {
+      alert('Código Inválido", Verifique se o código digitado está correto.');
+      this.setState({ loadingRedeem: false });
+      return;
     });
   }
 
@@ -221,7 +244,7 @@ class PhoneVerifyScreen extends React.Component {
           justifyContent: "space-between",
           alignItems: "center",
           opacity: this.state.verifyOpacity,
-          width: "100%"
+          width: "100%",
           // backgroundColor: '#ff0'
         }}
       >
@@ -237,20 +260,20 @@ class PhoneVerifyScreen extends React.Component {
                 marginLeft: -10,
                 height: 80,
                 marginBottom: 50,
-                marginTop: 40
+                marginTop: 40,
               }}
             >
               <View
                 style={{
                   flexDirection: "row",
                   alignItems: "flex-start",
-                  marginBottom: 15
+                  marginBottom: 15,
                 }}
               >
                 <CountryPicker
                   onPress={() => {}}
                   cca2={this.state.countryInfo.cca2}
-                  onChange={e => {
+                  onChange={(e) => {
                     this._ref.focus();
                     this.setState({ countryInfo: e });
                   }}
@@ -269,7 +292,7 @@ class PhoneVerifyScreen extends React.Component {
                   fontWeight: "normal",
                   fontSize: 5,
                   flexDirection: "row",
-                  marginBottom: 15
+                  marginBottom: 15,
                 }}
               >
                 {this.renderNumber()}
@@ -278,17 +301,17 @@ class PhoneVerifyScreen extends React.Component {
           </TouchableOpacity>
           <TextInput
             testID="phoneInput"
-            ref={ref => (this._ref = ref)}
+            ref={(ref) => (this._ref = ref)}
             keyboardType={"phone-pad"}
             style={{
               position: "absolute",
               top: -1000,
               left: -1000,
               backgroundColor: "tranparent",
-              color: "transparent"
+              color: "transparent",
             }}
             value={this.state.number}
-            onChangeText={num => {
+            onChangeText={(num) => {
               if (num.length < 12) {
                 this.setState({ number: num });
               }
@@ -315,7 +338,7 @@ class PhoneVerifyScreen extends React.Component {
           marginBottom: this.state.keyboardHeight,
           justifyContent: "space-between",
           alignItems: "center",
-          height: 100
+          height: 100,
           // backgroundColor: '#f0f'
         }}
       >
@@ -330,7 +353,7 @@ class PhoneVerifyScreen extends React.Component {
               flexDirection: "row",
               fontSize: 5,
               marginTop: -50,
-              paddingTop: 20
+              paddingTop: 20,
             }}
           >
             {this.renderCode()}
@@ -343,12 +366,12 @@ class PhoneVerifyScreen extends React.Component {
           keyboardType={"phone-pad"}
           style={{ position: "absolute", top: -200, left: -200 }}
           value={this.state.code}
-          onChangeText={num => {
+          onChangeText={(num) => {
             if (num.length < this.props.codeLength + 1) {
               this.setState({ code: num });
             }
           }}
-          ref={ref => (this._ref2 = ref)}
+          ref={(ref) => (this._ref2 = ref)}
         />
         <Button
           testID="codeButton"
@@ -386,7 +409,7 @@ PhoneVerifyScreen.propTypes = {
   codeLength: PropTypes.number,
 
   cca2: PropTypes.string,
-  callingCode: PropTypes.string
+  callingCode: PropTypes.string,
 };
 
 PhoneVerifyScreen.defaultProps = {
@@ -405,7 +428,7 @@ PhoneVerifyScreen.defaultProps = {
   codeLength: 6,
 
   cca2: "BR",
-  callingCode: "55"
+  callingCode: "55",
 };
 
 export default PhoneVerifyScreen;
