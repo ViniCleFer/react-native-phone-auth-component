@@ -43,8 +43,8 @@ class PhoneVerifyScreen extends React.Component {
         fontSize: 22,
         paddingLeft: 30,
         paddingRight: 30,
-        marginTop: 30,
-        marginBottom: 100,
+        marginTop: -180,
+        // marginBottom: -50,
         width: width,
         zIndex: 999
       },
@@ -216,12 +216,13 @@ class PhoneVerifyScreen extends React.Component {
     let verifying = (
       <Animated.View
         style={{
-          flex: 1,
+          heigth: 400,
           flexDirection: "column",
           justifyContent: "space-between",
           alignItems: "center",
           opacity: this.state.verifyOpacity,
           width: "100%"
+          // backgroundColor: '#ff0'
         }}
       >
         <>
@@ -233,8 +234,10 @@ class PhoneVerifyScreen extends React.Component {
               style={{
                 alignItems: "center",
                 flexDirection: "row",
-                marginLeft: -20,
-                height: Platform.OS === "ios" ? 200 : 120
+                marginLeft: -10,
+                height: 80,
+                marginBottom: 50,
+                marginTop: 40
               }}
             >
               <View
@@ -312,16 +315,24 @@ class PhoneVerifyScreen extends React.Component {
           marginBottom: this.state.keyboardHeight,
           justifyContent: "space-between",
           alignItems: "center",
-          flex: 1
+          height: 100
+          // backgroundColor: '#f0f'
         }}
       >
-        <Text style={[this.styles.title, { height: 100 }]}>
+        <Text style={[this.styles.title, { height: 100, marginTop: -200 }]}>
           Digite o código de validação que você irá receber por sms em seu
           telefone
         </Text>
 
         <TouchableOpacity onPress={() => this._ref2.focus()}>
-          <View style={{ flexDirection: "row", fontSize: 5, marginBottom: 15 }}>
+          <View
+            style={{
+              flexDirection: "row",
+              fontSize: 5,
+              marginTop: -50,
+              paddingTop: 20
+            }}
+          >
             {this.renderCode()}
           </View>
         </TouchableOpacity>
