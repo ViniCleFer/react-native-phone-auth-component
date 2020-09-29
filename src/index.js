@@ -7,6 +7,7 @@ import {
   TextInput,
   Platform,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 import Button from "./Button";
 import CountryPicker from "react-native-country-picker-modal-vcf";
@@ -192,11 +193,10 @@ class PhoneVerifyScreen extends React.Component {
     this.setState({ loading: true });
     let string = `+${this.state.countryInfo.callingCode}${this.state.number}`;
 
-    console.log(string.length, "string");
-
     if (string.length < 14) {
-      alert(
-        'Número Inválido", O número de telefone está incompleto, preencha todos os campos solicitados.'
+      Alert.alert(
+        "Número Inválido",
+        "O número de telefone está incompleto, preencha todos os campos solicitados."
       );
       this.setState({ loading: false });
 
@@ -221,15 +221,19 @@ class PhoneVerifyScreen extends React.Component {
     this.setState({ loadingRedeem: true });
 
     if (String(this.state.code).length < 6) {
-      alert(
-        'Código Inválido", O código está incompleto, preencha todos os campos solicitados.'
+      Alert.alert(
+        "Código Inválido",
+        "O código está incompleto, preencha todos os campos solicitados."
       );
       this.setState({ loadingRedeem: false });
       return;
     }
 
     this.props.redeemCode(String(this.state.code)).catch(() => {
-      alert('Código Inválido", Verifique se o código digitado está correto.');
+      Alert.alert(
+        "Código Inválido",
+        "Verifique se o código digitado está correto."
+      );
       this.setState({ loadingRedeem: false });
       return;
     });
